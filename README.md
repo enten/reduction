@@ -22,6 +22,7 @@ It uses [Universal Development Kit](https://github.com/enten/udk) to won't have 
   * [`babel-plugin-universal-import`](https://github.com/faceyspacey/babel-plugin-universal-import)
 * Extreme live development: hot reloading of all changes into webpack, client and server layers.
 * Full ES2015+ support: use the same JS syntax across the client and server sources.
+* Preconfigured to deploy to [now](https://zeit.co/now) with a single command.
 
 ## Getting started
 

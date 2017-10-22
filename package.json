@@ -7,8 +7,12 @@
     "build": "udk",
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "dev": "udkc",
+    "now-build": "npm run build:prod",
+    "now-start": "npm run server:prod",
     "prestart": "npm run build:prod",
-    "start": "cross-env NODE_ENV=production node $npm_package_main",
+    "start": "npm run server:prod",
+    "server": "node $npm_package_main",
+    "server:prod": "cross-env NODE_ENV=production npm run server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
