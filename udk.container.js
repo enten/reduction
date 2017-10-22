@@ -7,6 +7,7 @@ module.exports = {
       }
     },
     metafiles: [
+      '.babelrc',
       'package.json',
       'server.js',
       'universal.config.js',

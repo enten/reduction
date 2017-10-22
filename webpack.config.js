@@ -19,7 +19,6 @@ const {
   isDev,
   isProd,
   nodeModulesDir,
-  outputEntryName,
   serverEntry,
   serverOutputPath,
   statsFilename

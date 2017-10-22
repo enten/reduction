@@ -2,11 +2,13 @@
   "name": "reduction",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server/main.js",
   "scripts": {
     "build": "udk",
-    "build:prod": "cross-env NODE_ENV=production udk",
+    "build:prod": "cross-env NODE_ENV=production npm run build",
     "dev": "udkc",
+    "prestart": "npm run build:prod",
+    "start": "cross-env NODE_ENV=production node $npm_package_main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
