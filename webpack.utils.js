@@ -25,7 +25,7 @@ function extractCssRule (options = {}) {
     extract,
     preCssLoader = 'stylus-loader',
     preCssLoaderOptions = {},
-    test = /\.styl$/
+    test = /\.css$/
   } = options
 
   const rule = {
@@ -39,10 +39,10 @@ function extractCssRule (options = {}) {
           localIdentName: '[name]__[local]--[hash:base64:5]'
         }, cssLoaderOptions)
       },
-      {
-        loader: preCssLoader,
-        options: Object.assign({}, preCssLoaderOptions)
-      }
+      // {
+      //   loader: preCssLoader,
+      //   options: Object.assign({}, preCssLoaderOptions)
+      // }
     ]
   }
 

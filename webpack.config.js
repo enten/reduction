@@ -34,9 +34,11 @@ const client = {
   context,
   devtool,
   entry: compact(
+    'babel-polyfill',
     isDev && [
       'react-hot-loader/patch'
     ],
+    'fetch-everywhere',
     clientEntry
   ),
   output: {
@@ -94,6 +96,8 @@ const server = {
   devtool,
   entry: compact(
     'source-map-support/register',
+    'babel-polyfill',
+    'fetch-everywhere',
     serverEntry
   ),
   output: {
@@ -125,6 +129,8 @@ const server = {
     filter: (mod) => {
       switch (mod) {
         case '.bin':
+        case 'babel-polyfill':
+        case 'fetch-everywhere':
         case 'react-universal-component':
         case 'source-map':
         case 'source-map-support':

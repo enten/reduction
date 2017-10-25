@@ -1,18 +1,19 @@
 # reduction
 
-> An universal react applications starter kit based on universal familly of packages.
+> An universal React/Redux applications starter kit based on universal familly of packages.
 
 ## About
 
-This starter kit contains all the minimal tooling and configuration you need to kick off your next universal React project.
+This starter kit contains all the minimal tooling and configuration you need to kick off your next universal React/Redux project.
 
 It uses [Universal Development Kit](https://github.com/enten/udk) to won't have to write specific code for development purposes (allows hot reloading on webpack, client and server layers).
 
 ## Features
 
 * [`udk`](https://github.com/enten/udk) as compiler and [development container](https://github.com/enten/udk#dev-container).
-* [`webpack`](https://github.com/webpack/webpack) v3 bundler.
-* [`react`](https://github.com/facebook/react/) as the view.
+* [`webpack`](https://github.com/webpack/webpack) v3 as bundler engine.
+* [`react`](https://github.com/facebook/react/) v16 as the view.
+* [`redux-first-router`](https://github.com/faceyspacey/redux-first-router) as the router.
 * [`express`](https://github.com/expressjs/express) server.
 * Server Side Rendering (SSR).
 * Universal Code-Splitting (JS and CSS) based on universal family of packages: 

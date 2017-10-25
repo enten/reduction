@@ -11,17 +11,23 @@ const nodeModulesDir = 'node_modules'
 
 module.exports = {
   context: R(),
-  clientEntry: R('client.js'),
-  clientOutputPath: dist('client'),
-  clientPublicPath: '/clt/',
+  clientEntry: R('src', 'client.js'),
+  clientOutputPath: dist('webapp'),
+  clientPublicPath: '/webapp/',
   envName,
   isDev,
   isProd,
   nodeModulesDir,
   outputEntryName: 'main',
-  serverEntry: R('server.js'),
+  serverEntry: R('src', 'server.js'),
   serverHost: '0.0.0.0',
-  serverOutputPath: dist('server'),
+  serverOutputPath: dist(),
   serverPort: 3000,
-  statsFilename: 'stats.json'
+  statsFilename: 'stats.json',
+  webapp: {
+    containerId: 'webapp',
+    lang: 'en',
+    storeExportName: '__WEBAPP_STATE',
+    title: 'Reduction Starter Kit'
+  }
 }

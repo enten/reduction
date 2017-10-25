@@ -9,10 +9,10 @@ module.exports = {
     metafiles: [
       '.babelrc',
       'package.json',
-      'server.js',
-      'universal.config.js',
-      'webapp/css',
-      'webpack.utils.js'
+      'src/css',
+      'src/server.js',
+      'webpack.utils.js',
+      'universal.config.js'
     ],
     webpackConfig: 'webpack.config.js'
   }
