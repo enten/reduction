@@ -1,17 +1,16 @@
 import api from './api'
-import createHttpServer from './lib/createHttpServer'
-import uconfig from '../universal.config'
+import createServer from './lib/createServer'
 
-const {
+import {
   serverHost,
   serverPort,
   serverSsl
-} = uconfig
+} from '../universal.config'
 
-let handleRequest = api
-process.on('unhandledRejection', console.error)
-const server = createHttpServer(serverSsl, (req, res) => {
-  handleRequest(req, res)
+let requestListener = api
+
+const server = createServer(serverSsl, (req, res) => {
+  requestListener(req, res)
 })
 
 server.listen(serverPort, serverHost, () => {
@@ -20,7 +19,7 @@ server.listen(serverPort, serverHost, () => {
 
 if (module.hot) {
   module.hot.accept('./api', () => {
-    handleRequest = require('./api').default
+    requestListener = require('./api').default
   })
 }
 

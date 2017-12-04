@@ -1,14 +1,14 @@
 {
   "name": "reduction",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An universal React/Redux applications starter kit based on universal familly of packages.",
   "main": "dist/main.js",
   "scripts": {
     "build": "udk",
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "dev": "udkc",
-    "now-build": "npm run build:prod",
-    "now-start": "npm run server:prod",
+    "now-build": "cross-env URL=https://reduction-jpxieparhr.now.sh npm run build:prod",
+    "now-start": "cross-env URL=https://reduction-jpxieparhr.now.sh npm run server:prod",
     "prestart": "npm run build:prod",
     "start": "npm run server:prod",
     "server": "node $npm_package_main",
@@ -29,15 +29,15 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-no-favicons": "0.0.1",
-    "history": "^4.7.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
-    "redux-first-router": "^1.9.19",
-    "redux-first-router-link": "^1.4.1",
+    "redux-first-router": "0.0.4-rudy",
+    "redux-first-router-link": "0.0.2-rudy",
     "reselect": "^3.0.1",
+    "tapable": "^0.2.8",
     "transition-group": "0.0.2"
   },
   "devDependencies": {
@@ -58,8 +58,8 @@
     "source-map-support": "^0.4.18",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "udk": "0.0.9",
-    "webpack": "^3.5.6",
+    "udk": "^0.2.1",
+    "webpack": "^3.8.1",
     "webpack-flush-chunks": "^1.2.0",
     "webpack-stats-plugin": "^0.1.5"
   }
