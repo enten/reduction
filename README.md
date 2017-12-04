@@ -2,13 +2,13 @@
 
 > An universal React/Redux applications starter kit based on universal familly of packages.
 
-## Demos
+## Demo
 
-| Bundle | Webpack config   | Sources       | URL
-|--------|------------------|---------------|-------------------------------------
-| app    | [app.config.js](./webpack/app.config.js)    | [src/app/](./src/app/)      | https://enten-reduction.now.sh/app/
-| demo   | [demo.config.js](./webpack/demo.config.js)   | [src/demo/](./src/demo)     | https://enten-reduction.now.sh/demo/
-| server | [server.config.js](./webpack/server.config.js) | [src/server.js](./src/server.js) | https://enten-reduction.now.sh/
+| Bundle | Target | Webpack config | Sources | URL
+|--------|--------| ---------------|---------|-----
+| **app** | web | [webpack/app.config.js](./webpack/app.config.js) | [src/app/](./src/app/) | https://enten-reduction.now.sh/app/
+| **demo** | web | [webpack/demo.config.js](./webpack/demo.config.js) | [src/demo/](./src/demo) | https://enten-reduction.now.sh/demo/
+| **server** | node | [webpack/server.config.js](./webpack/server.config.js) | [src/server.js](./src/server.js) | https://enten-reduction.now.sh/
 
 ## About
 
@@ -45,11 +45,11 @@ npm run dev
 ## Things To Do
 
 - Run dev container with `npm run dev`
-- Open [localhost:3000](http://localhost:3000) in your browser
-- Click "CHANGE PAGE" to cycle through dynamically imported pages
-- refresh on any page
+- Open [localhost:3000/app](http://localhost:3000/app) or [localhost:3000/demo](http://localhost:3000/demo) in your browser
+- Navigate through dynamically imported pages
+- and refresh on any page
 - and then view the source in the browser to see what chunks are being sent on each page
-- **view the primary code in:** ***[webapp/components/App.js](./webapp/components/App.js)***
+- **view the primary code in:** ***[src/app/components/App.js](./src/app/components/App.js) or [src/demo/components/App.js](./src/demo/components/App.js)***
 - open the Network tab to see when imports are fetched
 - edit the components to see that HMR works--even for split chunks.
 - edit and save the CSS files to confirm HMR works for CSS as well, thanks to [extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin)
