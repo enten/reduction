@@ -2,6 +2,14 @@
 
 > An universal React/Redux applications starter kit based on universal familly of packages.
 
+## Demos
+
+| Bundle | Webpack config   | Sources       | URL
+|--------|------------------|---------------|-------------------------------------
+| app    | [app.config.js](./webpack/app.config.js)    | [src/app/](./src/app/)      | https://enten-reduction.now.sh/app/
+| demo   | [demo.config.js](./webpack/demo.config.js)   | [src/demo/](./src/demo)     | https://enten-reduction.now.sh/demo/
+| server | [server.config.js](./webpack/server.config.js) | [src/server.js](./src/server.js) | https://enten-reduction.now.sh/
+
 ## About
 
 This starter kit contains all the minimal tooling and configuration you need to kick off your next universal React/Redux project.
