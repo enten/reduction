@@ -42,5 +42,6 @@ module.exports = {
   get serverUrl () {
     return process.env.URL || `http://${this.serverHost}:${this.serverPort}`
   },
+
   statsFilename: 'stats.json'
 }

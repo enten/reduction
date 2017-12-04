@@ -29,6 +29,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-no-favicons": "0.0.1",
+    "marked": "^0.3.7",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",

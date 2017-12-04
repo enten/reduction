@@ -14,6 +14,7 @@ const {
   isDev,
   isProd,
   nodeModulesDir,
+  nodeModulesRegex,
   serverName,
   serverEntry,
   serverHost,
@@ -55,11 +56,11 @@ const server = {
   module: {
     rules: compact(
       rules.babel({
-        exclude: new RegExp(nodeModulesDir)
+        exclude: nodeModulesRegex
       }),
       rules.extractCss({
         cssLoader: 'css-loader/locals',
-        exclude: new RegExp(nodeModulesDir),
+        exclude: nodeModulesRegex,
       })
     )
   },
