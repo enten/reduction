@@ -1,6 +1,6 @@
 # reduction
 
-> An universal React/Redux applications starter kit based on universal familly of packages.
+> An universal React/Redux applications starter kit based on universal family of packages.
 
 ## Demo
 

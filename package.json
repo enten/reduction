@@ -1,7 +1,7 @@
 {
   "name": "reduction",
   "version": "0.0.2",
-  "description": "An universal React/Redux applications starter kit based on universal familly of packages.",
+  "description": "An universal React/Redux applications starter kit based on universal family of packages.",
   "main": "dist/main.js",
   "scripts": {
     "build": "udk",
