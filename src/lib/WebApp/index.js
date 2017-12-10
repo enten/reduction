@@ -1,44 +1,61 @@
 const Hookable = require('../Hookable')
 
-const {
-  Dehydration,
-  Rehydration
-} = require('./Hydration')
-
 class WebApp extends Hookable {
+  constructor (options) {
+    super(options)
+
+    this.defaultName('webapp')
+    this.defaultPublicPath('/')
+  }
+
   client (win) {
-    const rehydration = this.newRehydration({win})
+    const rehydration = this.newRehydration({
+      getWindow: () => win || window
+    })
 
     return rehydration
+  }
+
+  createDehydration (options) {
+    const {Dehydration} = this
+
+    return new Dehydration(options)
+  }
+
+  createRehydration (options) {
+    const {Rehydration} = this
+
+    return new Rehydration(options)
   }
 
   middleware () {
     const router = this.newRouter()
 
-    router.use((req, res, next) => {
-      const dehydration = this.newDehydration({
-        req,
-        res,
-        next
-      })
+    router.get('*', async (req, res, next) => {
+      try {
+        const dehydration = this.newDehydration({
+          req,
+          res,
+          next
+        })
 
-      res.locals[dehydration.name] = dehydration
-
-      this.handleRequest(dehydration)
+        await this.handleRequest(dehydration)
+      } catch (err) {
+        next(err)
+      }
     })
-
-    if (this.publicPath !== '/') {
-      return this.createRouter().on('mount', (parent) => {
-        parent._router.stack.pop()
-        parent._router.use(this.publicPath, router)
-      })
-    }
 
     return router
   }
 
+  mount (router) {
+    router.use(this.publicPath, this.middleware())
+
+    return this
+  }
+
   newDehydration (options) {
-    const dehydration = this.createDehydration(this, options)
+    const dehydration = this.createDehydration(options)
 
     this.applyPlugins('new-hydration', dehydration)
     this.applyPlugins('new-dehydration', dehydration)
@@ -47,7 +64,7 @@ class WebApp extends Hookable {
   }
 
   newRehydration (options) {
-    const rehydration = this.createRehydration(this, options)
+    const rehydration = this.createRehydration(options)
 
     this.applyPlugins('new-hydration', rehydration)
     this.applyPlugins('new-rehydration', rehydration)
@@ -55,64 +72,56 @@ class WebApp extends Hookable {
     return rehydration
   }
 
-  newRouter (options) {
-    const router = this.createRouter(options)
-
-    const {
-      outputPath,
-      serveStatic,
-      serveStaticOptions
-    } = this
-
-    if (outputPath) {
-      router.use(serveStatic(outputPath, serveStaticOptions))
-    }
+  newRouter () {
+    const router = this.createRouter()
 
     this.applyPlugins('new-router', router)
-
-    router.on('mount', () => console.log('mountpath', router.mountpath))
 
     return router
   }
 }
 
-function defaultCreateRouter (options) {
+function DefaultDehydration (options) {
+  throw new Error('Dehydration() must be overridden')
+}
+
+function DefaultRehydration (options) {
+  throw new Error('Rehydration() must be overridden')
+}
+
+function defaultCreateRouter () {
   throw new Error('createRouter() must be overridden')
-}
-
-function defaultCreateDehydration (webapp, options) {
-  return new Dehydration(webapp, options)
-}
-
-function defaultCreateRehydration (webapp, options) {
-  return new Rehydration(webapp, options)
 }
 
 function defaultHandleRequest (dehydration) {
   const {next} = dehydration
 
-  return dehydration.dehydrate()
-      .then(() => {
-        next()
-        return dehydration
-      })
-      .catch(next)
+  dehydration.dehydrate()
+    .then(() => next())
+    .catch(next)
 }
 
-function defaultServeStatic (path, options) {
-  throw new Error('serveStatic() must be overridden')
+WebApp
+  .defineOption('name')
+  .defineOption('publicPath')
+  .defineOption('Dehydration', () => DefaultDehydration)
+  .defineOption('Rehydration', () => DefaultRehydration)
+  .defineOption('createRouter', () => defaultCreateRouter)
+  .defineOption('handleRequest', () => defaultHandleRequest)
+
+if (__BROWSER__) {
+  const Rehydration = require('../Rehydration')
+
+  WebApp.defineOption('Rehydration', () => Rehydration)
 }
 
-WebApp.defineOptions({
-  name: () => 'webapp',
-  outputPath: () => {},
-  publicPath: () => '/',
-  createDehydration: () => defaultCreateDehydration,
-  createRehydration: () => defaultCreateRehydration,
-  createRouter: () => defaultCreateRouter,
-  handleRequest: () => defaultHandleRequest,
-  serveStatic: () => defaultServeStatic,
-  serveStaticOptions: () => {}
-})
+if (__NODE__) {
+  const Dehydration = require('../Dehydration')
+  const express = require('express')
+
+  WebApp
+    .defineOption('Dehydration', () => Dehydration)
+    .defineOption('createRouter', () => express)
+}
 
 module.exports = WebApp

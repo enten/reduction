@@ -5,7 +5,7 @@ import universal from 'react-universal-component'
 
 import Link, {NavLink} from 'redux-first-router-link'
 
-import styles from '../styles'
+import styles from '../_styles'
 
 const UniversalComponent = universal(({page}) => import(`./${page}`), {
   minDelay: 200

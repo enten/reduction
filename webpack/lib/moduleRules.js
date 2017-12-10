@@ -24,28 +24,36 @@ function extractCss (options = {}) {
     cssLoaderOptions = {},
     exclude,
     extract,
-    preCssLoader = 'stylus-loader',
-    preCssLoaderOptions = {},
-    test = /\.(css|styl)$/
+    postCssLoader = 'postcss-loader',
+    postCssLoaderOptions = {},
+    sassLoader = 'sass-loader',
+    sassLoaderOptions = {},
+    styleLoader = 'style-loader',
+    styleLoaderOptions = {},
+    test = /\.s?css$/
   } = options
 
   const rule = {
     test,
     exclude,
-    use: [
-      {
-        loader: cssLoader,
-        options: Object.assign({
-          modules: true,
-          localIdentName: '[name]__[local]--[hash:base64:5]'
-        }, cssLoaderOptions)
-      },
-      {
-        loader: preCssLoader,
-        options: Object.assign({}, preCssLoaderOptions)
-      }
-    ]
+    use: []
   }
+
+  cssLoader && rule.use.push({
+    loader: cssLoader,
+    options: Object.assign({
+      modules: true,
+      localIdentName: '[name]__[local]--[hash:base64:5]'
+    }, cssLoaderOptions)
+  })
+
+  sassLoader && rule.use.push({
+    loader: sassLoader,
+    options: Object.assign({
+      sourceMap: true,
+      outputStyle: options.isProd || options.production ? 'compressed' : 'expanded'
+    }, sassLoaderOptions)
+  })
 
   if (extract) {
     rule.use = extract(rule.use)
@@ -54,7 +62,16 @@ function extractCss (options = {}) {
   return rule
 }
 
+function url (options) {
+  return Object.assign({
+    test: /\.(woff2?|ttf|eot|svg)$/,
+    loader: 'url-loader?limit=10000',
+    exclude: /node_modules|SVGIcon\/icons/,
+  }, options)
+}
+
 module.exports = {
   babel,
-  extractCss
+  extractCss,
+  url
 }

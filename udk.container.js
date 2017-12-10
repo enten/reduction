@@ -31,9 +31,6 @@ module.exports = {
   onCompilerFailed (err) {
     this.logger.error('[udk] >>> compiler failed')
   },
-  onCompilerInvalid (...args) {
-    this.logger.info('[udk] >>> compiler invalid', args)
-  },
   onCompilerWatching (err, stats) {
     this.logger.info('[udk] >>> compiler watching...')
   },
@@ -51,6 +48,12 @@ module.exports = {
   },
   prepareCompiler (compiler) {
     this.logger.info('[udk] >>> prepare webpack compiler')
+
+    compiler.compilers.forEach((c) => {
+      c.plugin('invalid', (file) => {
+        this.logger.info('[udk] >>> compiler invalid', c.name, file)
+      })
+    })
   },
   prepareWebpackConfig () {
     this.logger.info('[udk] >>> prepare webpack config')

@@ -24,7 +24,7 @@ const {
 } = require('../universal.config')
 
 const devtool = isProd ? 'source-map' : 'eval'
-const resolveExtensions = () => ['.js', '.css', '.styl']
+const resolveExtensions = () => ['.js', '.css', '.scss']
 
 const server = {
   name: serverName,
@@ -60,7 +60,7 @@ const server = {
       }),
       rules.extractCss({
         cssLoader: 'css-loader/locals',
-        exclude: nodeModulesRegex,
+        exclude: nodeModulesRegex
       })
     )
   },

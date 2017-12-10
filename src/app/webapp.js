@@ -1,59 +1,49 @@
-const ReactRendererPlugin = require('../lib/WebApp/plugins/ReactRendererPlugin')
-const RendererPlugin = require('../lib/WebApp/plugins/RendererPlugin')
-const RudyStore = require('../lib/RudyStore')
-const StorePlugin = require('../lib/WebApp/plugins/StorePlugin')
+const ReactRendererPlugin = require('../lib/WebApp/ReactRendererPlugin')
+const StorePlugin = require('../lib/WebApp/StorePlugin')
 const WebApp = require('../lib/WebApp')
+const RudyStore = require('../lib/RudyStore')
 
-import App from './components/App'
-import configureStore from './configureStore'
-import uconfig from '../../universal.config'
+const uconfig = require('../../universal.config')
+
+const {default: App} = require('./components/App')
+const {default: configureStore} = require('./configureStore')
+
+const webapp = new WebApp({
+  name: uconfig.appName,
+  publicPath: uconfig.appPublicPath
+})
 
 const renderer = new ReactRendererPlugin({
   Component: App
 })
 
 const storePlugin = new StorePlugin({
-  createStore: (options, hydration) => new RudyStore(options),
+  createStore: (options) => new RudyStore(options),
   configureStore
 })
 
-const templatePlugin = new RendererPlugin({
-  afterDehydrate (dehydration, done) {
-    const {
-      body,
-      head
-    } = dehydration
+webapp.apply(storePlugin)
+webapp.apply(renderer)
 
-    let title = ''
+webapp.plugin('new-dehydration', (dehydration) => {
+  const {doc} = dehydration
 
-    const store = dehydration.getStore()
+  dehydration.plugin('after-dehydrate', (done) => {
+    const scripts = doc.getElementsByTagName('script')
 
-    if (store) {
-      title = store.getState().title
-    }
-
-    dehydration.body = ''
-    dehydration.head = ''
-
-    dehydration.appendRaw(
-      '<!doctype html>' +
-      '<html>' +
-        '<head>' +
-          head +
-          '<title>' + title + '</title>' +
-        '</head>' +
-        '<body>' + body + '</body>' +
-      '</html>'
-    )
+    scripts.forEach((scriptTag) => {
+      scriptTag.setAttribute('nonce', 'fake')
+    })
 
     done()
-  }
-})
+  })
 
-const webapp = new WebApp({
-  name: uconfig.appName,
-  outputPath: uconfig.appOutputPath,
-  publicPath: uconfig.appPublicPath
+  const metaTag = doc.createElement('meta')
+  metaTag.setAttribute('charset', 'UTF-8')
+
+  doc.head.appendChild(metaTag
+)
+  doc.title = 'foobar'
 })
 
 webapp.setHandleRequest(async (dehydration) => {
@@ -91,21 +81,51 @@ webapp.setHandleRequest(async (dehydration) => {
 
   dehydration.dehydrate()
     .then(() => {
-      console.log('> dehydration', dehydration.name)
-      res.send(dehydration.toString())
+      res.send(dehydration.htmlToString())
       next()
     })
     .catch(next)
 })
 
-webapp.apply(
-  storePlugin,
-  renderer,
-  templatePlugin
-)
-
 if (__NODE__) {
-  require('./webapp.node')(webapp)
+  const FlushChunksPlugin = require('../lib/WebApp/FlushChunksPlugin')
+  const ServeStaticPlugin = require('../lib/WebApp/ServeStaticPlugin')
+
+  const flushChunksPlugin = new FlushChunksPlugin({
+    flushOptions: {
+      outputPath: uconfig.appOutputPath
+    }
+  })
+
+  flushChunksPlugin.setGetStats(function ({res}) {
+    if (this.stats) {
+      return this.stats
+    }
+
+    if (res) {
+      const {webpackStats} = res.locals
+
+      if (webpackStats) {
+        return webpackStats[this.webapp.name]
+      }
+    }
+  })
+
+  if (uconfig.isProd) {
+    const {readFileSync} = require('fs')
+    const {resolve} = require('path')
+
+    const statsPath = resolve(uconfig.appOutputPath, uconfig.statsFilename)
+    const statsRaw = readFileSync(statsPath, 'utf8')
+    const stats = JSON.parse(statsRaw)
+
+    flushChunksPlugin.setStats(stats)
+  }
+
+  const serveStaticPlugin = new ServeStaticPlugin(uconfig.appOutputPath)
+
+  webapp.apply(flushChunksPlugin)
+  webapp.apply(serveStaticPlugin)
 }
 
 if (module.hot) {

@@ -103,7 +103,7 @@ class StateManager extends Optionable {
 }
 
 StateManager.defineOptions({
-  exportKey: () => '__STATE',
+  exportKey: () => '__STATE__',
   exportVar: () => 'window',
   initState: () => {}
 })

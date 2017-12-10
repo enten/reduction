@@ -24,7 +24,7 @@ const {
 const devtool = isProd ? 'source-map' : 'eval'
 const filename = isProd ? '[name].[hash].js' : '[name].js'
 const chunkFilename = isProd ? '[name].[chunkhash].js' : '[name].js'
-const resolveExtensions = () => ['.js', '.css', '.styl']
+const resolveExtensions = () => ['.js', '.css', '.scss']
 
 module.exports = {
   name: demoName,
@@ -53,7 +53,10 @@ module.exports = {
       rules.babel({
         exclude: nodeModulesRegex
       }),
-      rules.extractCss(true)
+      rules.extractCss({
+        extract: true,
+        production: isProd
+      })
     )
   },
   plugins: compact(
