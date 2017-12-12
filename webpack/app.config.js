@@ -2,6 +2,11 @@ const plugins = require('./lib/plugins')
 const rules = require('./lib/moduleRules')
 
 const {
+  dirname,
+  join
+} = require('path')
+
+const {
   compact
 } = require('./lib/util')
 
@@ -14,6 +19,8 @@ const {
   envName,
   isDev,
   isProd,
+  // nodeModulesDir,
+  nodeModulesDir,
   nodeModulesRegex,
   serverHost,
   serverPort,
@@ -51,13 +58,24 @@ module.exports = {
   module: {
     rules: compact(
       rules.babel({
-        exclude: nodeModulesRegex
+        exclude: {
+          test: (value) => {
+            return nodeModulesRegex.test(value)
+              && !~value.indexOf('@material')
+              && !~value.indexOf('colors.css')
+          }
+        }
       }),
       rules.extractCss({
         extract: true,
-        production: isProd
+        production: isProd,
+        sassLoaderOptions: {
+          includePaths: [
+            nodeModulesDir
+          ]
+        }
       }),
-      rules.url()
+      rules.fonts()
     )
   },
   plugins: compact(

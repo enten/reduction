@@ -1,0 +1,9 @@
+@import '../../ui/core';
+
+@import '../../ui/Icon/styles';
+@import '../../ui/Toolbar/styles';
+
+
+a.is-active {
+  @extend .bg-teal;
+}

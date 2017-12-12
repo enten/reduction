@@ -60,7 +60,12 @@ const server = {
       }),
       rules.extractCss({
         cssLoader: 'css-loader/locals',
-        exclude: nodeModulesRegex
+        exclude: nodeModulesRegex,
+        sassLoaderOptions: {
+          includePaths: [
+            nodeModulesDir
+          ]
+        }
       })
     )
   },

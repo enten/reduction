@@ -6,6 +6,13 @@ function babel (options = {}) {
   }, options)
 }
 
+function fonts (options = {}) {
+  return Object.assign({
+    test: /\.(eot|svg|ttf|woff|woff2)$/,
+    loader: 'file-loader?name=[name].[ext]'
+  }, options)
+}
+
 function extractCss (options = {}) {
   if (typeof options === 'function') {
     options = {extract: options}
@@ -24,8 +31,9 @@ function extractCss (options = {}) {
     cssLoaderOptions = {},
     exclude,
     extract,
-    postCssLoader = 'postcss-loader',
-    postCssLoaderOptions = {},
+    include,
+    // postCssLoader = 'postcss-loader',
+    // postCssLoaderOptions = {},
     sassLoader = 'sass-loader',
     sassLoaderOptions = {},
     styleLoader = 'style-loader',
@@ -36,6 +44,7 @@ function extractCss (options = {}) {
   const rule = {
     test,
     exclude,
+    include,
     use: []
   }
 
@@ -43,7 +52,8 @@ function extractCss (options = {}) {
     loader: cssLoader,
     options: Object.assign({
       modules: true,
-      localIdentName: '[name]__[local]--[hash:base64:5]'
+      localIdentName: '[local]'
+      // localIdentName: '[name]__[local]--[hash:base64:5]'
     }, cssLoaderOptions)
   })
 
@@ -73,5 +83,6 @@ function url (options) {
 module.exports = {
   babel,
   extractCss,
+  fonts,
   url
 }
