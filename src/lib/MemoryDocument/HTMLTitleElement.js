@@ -2,7 +2,7 @@ const DOMElement = require('min-document/dom-element')
 
 class HTMLTitleElement extends DOMElement {
   constructor (owner, namespace) {
-    super('TITLE')
+    super('TITLE', owner, namespace)
 
     this.innerHTML = ''
   }
